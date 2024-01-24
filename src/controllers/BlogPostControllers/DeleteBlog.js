@@ -1,7 +1,7 @@
 const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
 
-// Controller to delete a blog
+// Controller to delete a Blog
 deleteBlog = async (req, res) => {
     try {
         const userId = req.query.userId;
