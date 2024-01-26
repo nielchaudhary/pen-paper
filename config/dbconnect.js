@@ -1,14 +1,17 @@
 const mongoose = require("mongoose");
+require("dotenv").config();
 
-const dbConnect = () => {
+const mongoURI = process.env.MONGODB_URI;
+
+const dbConnect = async () => {
     try {
-        const conn = mongoose.connect("mongodb://localhost:27017/BlogWebsite",{
-        });
-        console.log("Blogwebsite Database connected");
+        const conn = await mongoose.connect(mongoURI);
+        console.log("Database connected");
+        return conn;
     } catch (err) {
-        console.log(err, "error connecting database");
+        console.error(err, "error connecting database");
+        throw err;
     }
 };
 
-
-module.exports = dbConnect
+module.exports = dbConnect;

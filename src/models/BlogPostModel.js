@@ -28,7 +28,7 @@ const blogPostSchema = new Schema({
     },
 });
 
-blogPostSchema.index({ 'createdAt': -1 }); // Retrieve N number of Latest Blogs
+blogPostSchema.index({ 'createdAt': -1 });
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 

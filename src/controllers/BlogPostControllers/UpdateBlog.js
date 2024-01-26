@@ -17,7 +17,7 @@ updateBlog = async (req, res) => {
         }
 
         // Find the blog by ID within the user's blogs
-        const blog = user.blogs.find((blog) => blog._id.toString() === blogId);
+        const blog = await BlogPost.findById(blogId);
 
         if (!blog) {
             return res.status(404).json({ error: 'Blog not found' });
@@ -26,7 +26,8 @@ updateBlog = async (req, res) => {
         // Update the blog's title, content, and updatedAt
         blog.title = title || blog.title;
         blog.content = content || blog.content;
-        blog.updatedAt = new Date(); // Update the updatedAt field
+        blog.updatedAt = new Date();
+        await blog.save()
         await user.save();
 
         res.json({ message: 'Blog updated successfully', updatedBlog: blog });
