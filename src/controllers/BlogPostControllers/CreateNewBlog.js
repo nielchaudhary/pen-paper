@@ -4,10 +4,10 @@ const BlogPost = require('../../models/BlogPostModel');
 const newBlog = async (req, res) => {
     try {
         const userId = req.query.userId;
-        const { title, content } = req.body;
+        const { title, content, category } = req.body;
 
         // Validate that both title and content are provided
-        if (!title || !content) {
+        if (!title || !content || !category) {
             return res.status(400).json({ error: 'Both title and content are required' });
         }
 
@@ -19,7 +19,7 @@ const newBlog = async (req, res) => {
         }
 
         // Create a new blog post
-        const newBlogPost = new BlogPost({ title, content , createdByUser: user._id });
+        const newBlogPost = new BlogPost({ title, content ,category, createdByUser: user._id });
         await newBlogPost.save();
 
         // Add the new blog post's ID to the user's blogs array

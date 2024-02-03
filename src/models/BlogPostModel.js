@@ -33,6 +33,8 @@ const blogPostSchema = new Schema({
 });
 
 blogPostSchema.index({ 'createdAt': -1 });
+blogPostSchema.index({ 'content': 'text' });
+
 
 const BlogPost = mongoose.model('BlogPost', blogPostSchema);
 

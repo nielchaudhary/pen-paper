@@ -19,6 +19,7 @@ const ReadSpecificBlogController = require('../controllers/BlogPostControllers/R
 const SearchBlogController = require('../controllers/BlogPostControllers/SearchBlogs')
 const LatestNBlogController = require('../controllers/BlogPostControllers/LatestNBlogs.js')
 const MostPopularBlogController = require('../controllers/BlogPostControllers/MostPopularBlog')
+const RecommendRelatedBlogsController = require('../controllers/BlogPostControllers/RecommendRelatedBlogs.js')
 
 // Endpoint for creating a new user
 router.post('/createNewBlog',limiter, AuthenticateUser, CreateNewBlogController);
@@ -29,5 +30,6 @@ router.get('/readSpecificBlog',limiter,ReadSpecificBlogController)
 router.get('/searchBlog',limiter, SearchBlogController)
 router.get('/latestNBlogs', limiter,LatestNBlogController)
 router.get('/mostPopularBlogs',limiter, MostPopularBlogController)
+router.get('/recommendRelatedBlogs',limiter,RecommendRelatedBlogsController)
 
 module.exports = router;

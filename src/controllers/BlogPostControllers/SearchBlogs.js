@@ -15,7 +15,8 @@ const SearchBlogs = async (req, res) => {
         const blogPosts = await BlogPost.find({
             $or: [
                 { title: { $regex: regex } },
-                { content: { $regex: regex } }
+                { content: { $regex: regex } },
+                {category : { $regex: regex } },
             ]
         });
 
