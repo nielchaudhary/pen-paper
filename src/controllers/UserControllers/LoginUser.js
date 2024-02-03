@@ -7,6 +7,9 @@ const secretKey = process.env.SECRET_KEY
 const loginUser = async (req, res) => {
     try {
         const { username, password } = req.body;
+        if(!username || !password) {
+            return res.status(400).send("Username and Password is required for Logging In.")
+        }
 
         // Find the user in the database by their username
         const user = await User.findOne({username : username});

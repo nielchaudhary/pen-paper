@@ -7,8 +7,9 @@ readSpecificBlog = async (req, res) => {
     try {
         const blogId = req.query.blogId;
 
+        //validation
         if (!blogId) {
-            res.status(400).json({ Alert: "Please Provide Blog ID" });
+            res.status(400).json({ Alert: "Please Provide Blog ID." });
             return;
         }
 

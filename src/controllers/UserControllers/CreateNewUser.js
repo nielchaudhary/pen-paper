@@ -4,6 +4,11 @@ const createUser = async (req, res) => {
     try {
         const { username, password } = req.body;
 
+        //validation
+        if(!username || !password) {
+            return res.status(400).send("Username and Password is required.")
+        }
+
         // Check if a user with the same username already exists
         const existingUser = await User.findOne({ username });
         if (existingUser) {

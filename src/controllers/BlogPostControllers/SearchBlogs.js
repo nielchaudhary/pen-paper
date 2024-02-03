@@ -5,7 +5,7 @@ const SearchBlogs = async (req, res) => {
         const searchQuery = req.query.search; // Get the search query from query parameters
 
         if (!searchQuery) {
-            return res.status(400).json({ error: 'Search query is required' });
+            return res.status(400).json({ error: 'Search query is required.' });
         }
 
         // Use a regular expression to perform a case-insensitive search on title and content

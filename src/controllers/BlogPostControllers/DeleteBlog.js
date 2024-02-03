@@ -7,6 +7,10 @@ deleteBlog = async (req, res) => {
         const userId = req.query.userId;
         const blogId = req.query.blogId;
 
+        if( !userId || !blogId) {
+            res.status(401).send("Both UserId and BlogId are required")
+        }
+
         // Find the user by ID
         const user = await User.findById(userId);
 

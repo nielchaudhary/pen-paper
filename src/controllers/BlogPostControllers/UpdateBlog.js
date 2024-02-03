@@ -9,6 +9,10 @@ updateBlog = async (req, res) => {
         const blogId = req.query.blogId;
         const { title, content } = req.body;
 
+        if (!userId || !blogId || !title || !content) {
+            return res.status(400).send("Please provide  userId, blogId, title and content.")
+        }
+
         // Find the user by ID
         const user = await User.findById(userId);
 

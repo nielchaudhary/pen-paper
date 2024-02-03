@@ -11,7 +11,6 @@ dbConnect();
 app.use(compression());
 app.use(express.json());
 
-
 app.use('/users', userRoutes);
 app.use('/blogs', blogRoutes);
 
