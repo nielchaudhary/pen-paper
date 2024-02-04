@@ -1,146 +1,188 @@
-    // newBlog.test.js
-    const newBlog = require('../src/controllers/BlogPostControllers/CreateNewBlog');
-    const User = require('../src/models/UserModel');
-    const BlogPost = require('../src/models/BlogPostModel');
+const jwt = require('jsonwebtoken');
+const BlogPost = require('../src/models/BlogPostModel');
+const User = require('../src/models/UserModel');
+const redis = require('redis-mock');
+const newBlog = require('../src/controllers/BlogPostControllers/CreateNewBlog');
+const Redis = require("redis-mock");
+const deleteBlog = require("../src/controllers/BlogPostControllers/DeleteBlog");
 
-    jest.mock('../src/models/UserModel');
-    jest.mock('../src/models/BlogPostModel');
+jest.mock('jsonwebtoken');
 
-    describe('newBlog Controller', () => {
-        it('should create a new blog post', async () => {
-            // Mock request and response objects
+describe('newBlog', () => {
+    let req, res;
+
+    beforeEach(() => {
+        req = { body: { title: 'Test Title', content: 'Test Content', category: 'Test Category' } };
+        res = {
+            json: jest.fn(),
+            status: jest.fn().mockReturnThis(),
+        };
+    });
+
+    afterEach(() => {
+        jest.restoreAllMocks();
+    });
+
+    it('should create a new blog', async () => {
+        // Mock Redis methods
+        const mockRedisClient = redis.createClient();
+        jest.spyOn(mockRedisClient, 'get').mockResolvedValue('"mocked-jwt"');
+        jest.spyOn(mockRedisClient, 'quit').mockResolvedValue();
+
+        // Mock the createClient method to return our mockRedisClient
+        jest.spyOn(redis, 'createClient').mockReturnValue(mockRedisClient);
+
+        // Mock jwt.verify
+        jest.spyOn(jwt, 'verify').mockReturnValue({ userId: 'mocked-user-id' });
+
+        // Mock User.findById to return a user with a valid _id and empty blogs array
+        jest.spyOn(User, 'findById').mockResolvedValue({ _id: 'mocked-user-id', blogs: [] });
+
+        // Mock BlogPost.save
+        jest.spyOn(BlogPost.prototype, 'save').mockResolvedValue();
+
+        // Ensure that newBlog returns a 200 status code upon success
+        jest.spyOn(res, 'status').mockReturnValue(res);
+
+        await newBlog(req, res);
+
+        // Basic Assertions
+        expect(res.status).toHaveBeenCalledWith(200);
+        expect(res.json).toHaveBeenCalled();
+        expect(BlogPost.prototype.save).toHaveBeenCalled();
+    });
+
+
+    describe('newBlog function', () => {
+        test('should return 400 status code if title is missing', async () => {
             const req = {
-                query: { userId: 'someUserId' },
-                body: { title: 'Test Blog', content: 'Test Content', category: 'Test Category' },
+                body: {
+                    // Omitting the title intentionally
+                    content: 'Some content',
+                    category: 'Some category',
+                },
             };
+
             const res = {
-                status: jest.fn().mockReturnThis(),
+                status: jest.fn(() => res),
                 json: jest.fn(),
             };
 
-            // Mock the User.findById method
-            User.findById.mockResolvedValueOnce({ _id: 'someUserId', blogs: [] });
-
-            // Mock the BlogPost save and User save methods
-            BlogPost.prototype.save.mockResolvedValueOnce({ _id: 'someBlogId' });
-            User.prototype.save.mockResolvedValueOnce({ blogs: ['someBlogId'] });
-
-            // Call the controller function
             await newBlog(req, res);
 
-            // Assertions
-            expect(User.findById).toHaveBeenCalledWith('someUserId');
-            expect(BlogPost).toHaveBeenCalledWith({
-                title: 'Test Blog',
-                content: 'Test Content',
-                category: 'Test Category',
-                createdByUser: 'someUserId',
-            });
-
-        });
-
-        it('should handle missing content', async () => {
-            // Mock request and response objects
-            const req = {
-                query: { userId: 'someUserId' },
-                body: { title: 'Test Blog', content: null, category: 'Test Category' }, // Missing content
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-
-            // Call the controller function
-            await newBlog(req, res);
-
-            // Assertions
+            // Use await before assertions to ensure the asynchronous function has completed
             expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Content required' });
-        });
-
-        it('should handle missing title', async () => {
-            // Mock request and response objects
-            const req = {
-                query: { userId: 'someUserId' },
-                body: { title: null, content: 'Test Content', category: 'Test Category' }, // Missing title
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-
-            // Call the controller function
-            await newBlog(req, res);
-
-            // Assertions
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Title Required' });
-        });
-
-        it('should handle missing category', async () => {
-            // Mock request and response objects
-            const req = {
-                query: { userId: 'someUserId' },
-                body: { title:'Test Title' , content: 'Test Content', category: null }, // Missing title
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-
-            // Call the controller function
-            await newBlog(req, res);
-
-            // Assertions
-            expect(res.status).toHaveBeenCalledWith(400);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Category required'});
-        });
-
-
-
-
-        it('should handle user not found', async () => {
-            // Mock request and response objects
-            const req = {
-                query: { userId: 'nonexistentUserId' },
-                body: { title: 'Test Blog', content: 'Test Content', category: 'Test Category' },
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-
-            // Mock the User.findById method to return null (user not found)
-            User.findById.mockResolvedValueOnce(null);
-
-            // Call the controller function
-            await newBlog(req, res);
-
-            // Assertions
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
-        });
-
-        it('should handle internal server error', async () => {
-            // Mock request and response objects
-            const req = {
-                query: { userId: 'someUserId' },
-                body: { title: 'Test Blog', content: 'Test Content', category: 'Test Category' },
-            };
-            const res = {
-                status: jest.fn().mockReturnThis(),
-                json: jest.fn(),
-            };
-
-            // Mock the User.findById method
-            User.findById.mockRejectedValueOnce(new Error('Database error'));
-
-            // Call the controller function
-            await newBlog(req, res);
-
-            // Assertions
-            expect(User.findById).toHaveBeenCalledWith('someUserId');
-            expect(res.status).toHaveBeenCalledWith(500);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+            expect(res.json).toHaveBeenCalledWith({ error: 'Title, content, and category are required' });
         });
     });
+
+    describe('newBlog function', () => {
+        test('should return 400 status code if content is missing', async () => {
+            const req = {
+                body: {
+                    // Omitting the title intentionally
+                    title: 'Some title',
+                    category: 'Some category',
+                },
+            };
+
+            const res = {
+                status: jest.fn(() => res),
+                json: jest.fn(),
+            };
+
+            await newBlog(req, res);
+
+            // Use await before assertions to ensure the asynchronous function has completed
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Title, content, and category are required' });
+        });
+    });
+
+    describe('newBlog function', () => {
+        test('should return 400 status code if category is missing', async () => {
+            const req = {
+                body: {
+                    // Omitting the title intentionally
+                    content: 'Some content',
+                    title: 'Some title',
+                },
+            };
+
+            const res = {
+                status: jest.fn(() => res),
+                json: jest.fn(),
+            };
+
+            await newBlog(req, res);
+
+            // Use await before assertions to ensure the asynchronous function has completed
+            expect(res.status).toHaveBeenCalledWith(400);
+            expect(res.json).toHaveBeenCalledWith({ error: 'Title, content, and category are required' });
+        });
+    });
+
+    it('should handle internal server error', async () => {
+        // Mock Redis methods
+        const mockRedisClient = redis.createClient();
+        jest.spyOn(mockRedisClient, 'get').mockResolvedValue('"mocked-jwt"');
+        jest.spyOn(mockRedisClient, 'quit').mockResolvedValue();
+
+        // Mock the createClient method to return our mockRedisClient
+        jest.spyOn(redis, 'createClient').mockReturnValue(mockRedisClient);
+
+        // Mock jwt.verify
+        jest.spyOn(jwt, 'verify').mockReturnValue({ userId: 'mocked-user-id' });
+
+        // Mock User.findById to return a user with a valid _id and empty blogs array
+        jest.spyOn(User, 'findById').mockResolvedValue({ _id: 'mocked-user-id', blogs: [] });
+
+        // Mock BlogPost.save to throw an error
+        jest.spyOn(BlogPost.prototype, 'save').mockRejectedValue(new Error('Simulated Error'));
+
+        await newBlog(req, res);
+
+        // Assertions for internal server error
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    });
+
+    it('should handle user not found', async () => {
+        // Mock Redis methods
+        const mockRedisClient = redis.createClient();
+        jest.spyOn(mockRedisClient, 'get').mockResolvedValue('"mocked-jwt"');
+        jest.spyOn(mockRedisClient, 'quit').mockResolvedValue();
+
+        // Mock the createClient method to return our mockRedisClient
+        jest.spyOn(redis, 'createClient').mockReturnValue(mockRedisClient);
+
+        // Mock jwt.verify
+        jest.spyOn(jwt, 'verify').mockReturnValue({ userId: 'mocked-user-id' });
+
+        // Mock User.findById to return null, simulating user not found
+        jest.spyOn(User, 'findById').mockResolvedValue(null);
+
+        await newBlog(req, res);
+
+        // Assertions for user not found
+        expect(res.status).toHaveBeenCalledWith(400);
+        expect(res.json).toHaveBeenCalledWith({ error: 'User not found' });
+    });
+
+    it('should handle Redis connection error', async () => {
+        // Mock Redis.createClient to throw an error
+        jest.spyOn(Redis, 'createClient').mockImplementation(() => {
+            throw new Error('Simulated Redis connection error');
+        });
+
+        // Call the controller
+        await newBlog(req, res);
+
+        // Assertions for Redis connection error
+        expect(res.status).toHaveBeenCalledWith(500);
+        expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+    });
+
+});
+
+
