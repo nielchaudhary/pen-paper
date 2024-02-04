@@ -3,7 +3,6 @@ const express = require('express');
 const app = express()
 const limiter = require('../middleware/RateLimiter')
 const router = express.Router();
-const AuthenticateUser = require('../middleware/AuthenticateUser')
 
 app.use(limiter)
 
@@ -22,9 +21,9 @@ const MostPopularBlogController = require('../controllers/BlogPostControllers/Mo
 const RecommendRelatedBlogsController = require('../controllers/BlogPostControllers/RecommendRelatedBlogs.js')
 
 // Endpoint for creating a new user
-router.post('/createNewBlog',limiter, AuthenticateUser, CreateNewBlogController);
-router.delete('/deleteBlog',limiter, AuthenticateUser, DeleteBlogController);
-router.put('/updateBlog',limiter, AuthenticateUser, UpdateBlogController);
+router.post('/createNewBlog',limiter, CreateNewBlogController);
+router.delete('/deleteBlog',limiter, DeleteBlogController);
+router.put('/updateBlog',limiter, UpdateBlogController);
 router.get('/readAllBlogs',limiter, ReadAllBlogsController);
 router.get('/readSpecificBlog',limiter,ReadSpecificBlogController)
 router.get('/searchBlog',limiter, SearchBlogController)

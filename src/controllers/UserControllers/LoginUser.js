@@ -1,8 +1,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/UserModel');
 require("dotenv").config()
-
 const secretKey = process.env.SECRET_KEY
+
+const Redis = require('redis')
+
+const redisClient = Redis.createClient()
+
+const default_expiry = 1800;
+
+
 
 const loginUser = async (req, res) => {
     try {
@@ -25,10 +32,17 @@ const loginUser = async (req, res) => {
         }
 
 
+
             // If the username and password match, generate a JWT
         const token = jwt.sign({ userId: user._id, username: user.username }, secretKey, { expiresIn: "1h" });
 
+        await redisClient.connect().then(()=>{
+            redisClient.setEx('jwt', default_expiry, token)
+        })
+
             res.json({ Message: "User Logged In Successfully", UserDetails: user, JWT: token });
+
+
 
 
 

@@ -1,44 +1,70 @@
-const User = require('../../models/UserModel')
-const BlogPost = require('../../models/BlogPostModel')
+const User = require('../../models/UserModel');
+const BlogPost = require('../../models/BlogPostModel');
+const jwt = require("jsonwebtoken");
+require('dotenv').config();
+const secretKey = process.env.SECRET_KEY;
 
+const Redis = require('redis')
+const redisClient = Redis.createClient()
 
 // Controller to update a blog
-updateBlog = async (req, res) => {
+const updateBlog = async (req, res) => {
     try {
-        const userId = req.query.userId;
-        const blogId = req.query.blogId;
-        const { title, content } = req.body;
+        await redisClient.connect();
+        const jwtvalue = await redisClient.get('jwt');
+        console.log('jwtvalue:', jwtvalue);
 
-        if (!userId || !blogId || !title || !content) {
-            return res.status(400).send("Please provide  userId, blogId, title and content.")
+        const tokenHeader = jwtvalue.replace(/["\\]/g, '');
+        console.log('tokenHeader:', tokenHeader);
+
+        if (!tokenHeader) {
+            return res.status(401).json({ error: 'Unauthorized - Invalid token format' });
         }
 
-        // Find the user by ID
-        const user = await User.findById(userId);
+        // Verify the token
+        jwt.verify(tokenHeader, secretKey, async (err, decoded) => {
+            if (err) {
+                return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+            }
 
-        if (!user) {
-            return res.status(404).json({ error: 'User not found' });
-        }
+            const userId = decoded.userId;
+            const blogId = req.query.blogId;
+            const { title, content, category } = req.body;
 
-        // Find the blog by ID within the user's blogs
-        const blog = await BlogPost.findById(blogId);
+            if (!userId || !blogId || !title || !content) {
+                return res.status(400).send("Please provide userId, blogId, title, and content.");
+            }
 
-        if (!blog) {
-            return res.status(404).json({ error: 'Blog not found' });
-        }
+            // Find the user by ID
+            const user = await User.findById(userId);
 
-        // Update the blog's title, content, and updatedAt
-        blog.title = title || blog.title;
-        blog.content = content || blog.content;
-        blog.updatedAt = new Date();
-        await blog.save()
-        await user.save();
+            if (!user) {
+                return res.status(404).json({ error: 'User not found' });
+            }
 
-        res.json({ message: 'Blog updated successfully', updatedBlog: blog });
+            // Find the blog by ID within the user's blogs
+            const blog = await BlogPost.findById(blogId);
+
+            if (!blog) {
+                return res.status(404).json({ error: 'Blog not found' });
+            }
+
+            // Update the blog's title, content, and updatedAt
+            blog.title = title || blog.title;
+            blog.content = content || blog.content;
+            blog.category = category || blog.category;
+            blog.updatedAt = new Date();
+            await blog.save();
+            await user.save();
+
+            res.json({ message: 'Blog updated successfully', updatedBlog: blog });
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
+    } finally {
+        await redisClient.quit();
     }
 };
 
-module.exports = updateBlog
+module.exports = updateBlog;

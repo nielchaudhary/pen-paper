@@ -8,7 +8,6 @@ const MostPopularBlogController = async (req, res) => {
         // Return the popular blog posts as JSON
         res.json(popularBlogPosts);
     } catch (error) {
-        console.error(error);
         res.status(500).json({ message: 'Internal Server Error' });
     }
 };
