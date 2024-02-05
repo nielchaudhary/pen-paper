@@ -1,5 +1,5 @@
-const BlogPostModel = require("../src/models/BlogPostModel");
-const MostPopularBlog = require("../src/controllers/BlogPostControllers/MostPopularBlog");
+const BlogPostModel = require("../../src/models/BlogPostModel");
+const MostPopularBlog = require("../../src/controllers/BlogPostControllers/MostPopularBlog");
 
 describe('MostPopularBlogController', () => {
     let req, res;

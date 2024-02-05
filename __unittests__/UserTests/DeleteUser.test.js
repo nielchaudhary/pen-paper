@@ -1,5 +1,5 @@
-const User = require('../src/models/UserModel');
-const deleteUser = require('../src/controllers/UserControllers/DeleteUser');
+const User = require('../../src/models/UserModel');
+const deleteUser = require('../../src/controllers/UserControllers/DeleteUser');
 
 describe('deleteUser', () => {
     let req, res;

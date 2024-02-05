@@ -12,7 +12,6 @@ const ReadAllBlogs = async (req, res) => {
 
         res.json({ page, blogPosts });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 };

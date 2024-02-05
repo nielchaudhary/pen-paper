@@ -1,5 +1,5 @@
-const User = require('../src/models/UserModel');
-const createUser = require('../src/controllers/UserControllers/CreateNewUser');
+const User = require('../../src/models/UserModel');
+const createUser = require('../../src/controllers/UserControllers/CreateNewUser');
 
 
 describe('createUser', () => {

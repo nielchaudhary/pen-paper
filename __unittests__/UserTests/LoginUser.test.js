@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
-const User = require('../src/models/UserModel');
-const loginUser = require('../src/controllers/UserControllers/LoginUser');
+const User = require('../../src/models/UserModel');
+const loginUser = require('../../src/controllers/UserControllers/LoginUser');
 
 const Redis = require('redis');
 
@@ -58,8 +58,8 @@ describe('loginUser', () => {
                 UserDetails: existingUser,
                 JWT: 'mockedJWT',
             });
-        }catch(error){
-            console.error(error)
+        }catch{
+
         }
     });
     it('should handle missing username during login', async () => {

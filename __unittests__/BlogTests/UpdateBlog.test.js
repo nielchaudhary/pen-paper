@@ -1,8 +1,8 @@
-const User = require('../src/models/UserModel');
-const BlogPost = require('../src/models/BlogPostModel');
+const User = require('../../src/models/UserModel');
+const BlogPost = require('../../src/models/BlogPostModel');
 const jwt = require('jsonwebtoken');
 const Redis = require('redis-mock'); // Use redis-mock for testing
-const updateBlog = require('../src/controllers/BlogPostControllers/UpdateBlog');
+const updateBlog = require('../../src/controllers/BlogPostControllers/UpdateBlog');
 const redis = require("redis-mock");
 
 jest.mock('jsonwebtoken');

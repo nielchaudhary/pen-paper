@@ -24,7 +24,6 @@ const deleteUser = async (req, res) => {
 
         res.json({ message: 'User deleted successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };

@@ -52,7 +52,6 @@ const recommendRelatedPosts = async (req, res) => {
         // Respond with status 200 and relatedPosts using .then
         return res.status(200).json({ relatedPosts });
     } catch (error) {
-        console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

@@ -1,5 +1,5 @@
-const BlogPostModel = require('../src/models/BlogPostModel');
-const recommendRelatedPosts = require('../src/controllers/BlogPostControllers/RecommendRelatedBlogs');
+const BlogPostModel = require('../../src/models/BlogPostModel');
+const recommendRelatedPosts = require('../../src/controllers/BlogPostControllers/RecommendRelatedBlogs');
 
 const TfIdf = require('node-tfidf')
 
@@ -86,8 +86,9 @@ describe('recommendRelatedPosts Controller Test', () => {
             expect(BlogPostModel.find).toHaveBeenCalledWith({ _id: { $ne: validPostId } });
             expect(res.json).toHaveBeenCalledWith({ relatedPosts: relatedPostsMock });
             expect(res.status).toHaveBeenCalledWith(200);
-        } catch (error) {
-            console.error('Test case error:', error);
+        } catch {
+
+
         }
     });
 

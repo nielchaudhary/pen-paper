@@ -1,5 +1,5 @@
-const BlogPostModel = require('../src/models/BlogPostModel');
-const SearchBlogs = require('../src/controllers/BlogPostControllers/SearchBlogs'); // Adjust the path accordingly
+const BlogPostModel = require('../../src/models/BlogPostModel');
+const SearchBlogs = require('../../src/controllers/BlogPostControllers/SearchBlogs'); // Adjust the path accordingly
 
 describe('SearchBlogs Controller', () => {
     let req, res;

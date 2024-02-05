@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
-const BlogPost = require('../src/models/BlogPostModel');
-const User = require('../src/models/UserModel');
+const BlogPost = require('../../src/models/BlogPostModel');
+const User = require('../../src/models/UserModel');
 const redis = require('redis-mock');
-const newBlog = require('../src/controllers/BlogPostControllers/CreateNewBlog');
+const newBlog = require('../../src/controllers/BlogPostControllers/CreateNewBlog');
 const Redis = require("redis-mock");
-const deleteBlog = require("../src/controllers/BlogPostControllers/DeleteBlog");
+const deleteBlog = require("../../src/controllers/BlogPostControllers/DeleteBlog");
 
 jest.mock('jsonwebtoken');
 

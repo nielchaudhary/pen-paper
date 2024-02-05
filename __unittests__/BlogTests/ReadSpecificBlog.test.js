@@ -1,5 +1,5 @@
-const BlogPostModel = require("../src/models/BlogPostModel");
-const readSpecificBlog = require("../src/controllers/BlogPostControllers/ReadSpecificBlog");
+const BlogPostModel = require("../../src/models/BlogPostModel");
+const readSpecificBlog = require("../../src/controllers/BlogPostControllers/ReadSpecificBlog");
 
 describe('readSpecificBlogController', () => {
     let req, res;

@@ -1,5 +1,5 @@
-const BlogPostModel = require("../src/models/BlogPostModel");
-const LatestNBlogs = require("../src/controllers/BlogPostControllers/LatestNBlogs");
+const BlogPostModel = require("../../src/models/BlogPostModel");
+const LatestNBlogs = require("../../src/controllers/BlogPostControllers/LatestNBlogs");
 
 describe('LatestNBlogs', () => {
     let req, res;

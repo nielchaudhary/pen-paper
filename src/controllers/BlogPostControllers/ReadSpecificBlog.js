@@ -28,7 +28,6 @@ readSpecificBlog = async (req, res) => {
         await blog.save();
 
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
