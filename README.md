@@ -15,7 +15,8 @@ Before you begin, ensure you have the following installed:
 
 ```bash
 git clone <repository_url>
-cd nodejs-blogging-app
+cd your-app-name
+
 ```
 
 ### 2. Install Dependencies
