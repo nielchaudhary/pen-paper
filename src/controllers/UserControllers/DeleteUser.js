@@ -5,7 +5,7 @@ const deleteUser = async (req, res) => {
         const { username, password } = req.body;
 
         if(!username || !password) {
-            return res.status(400).send("Both username and password is required to delete the account.")
+            return res.status(400).send("Both username and password are required to delete the account.")
         }
 
         // Check if a user with the provided username exists

@@ -17,9 +17,17 @@ const createUser = async (req, res) => {
 
         // If the username is unique, create a new user
         const newUser = new User({ username, password });
+        res.status(200).json({
+            message : 'User Successfully Created',
+            username : newUser.username,
+            password : newUser.password,
+
+        });
+
+
         await newUser.save();
 
-        res.json(newUser);
+
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });

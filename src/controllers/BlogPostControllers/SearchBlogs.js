@@ -4,7 +4,7 @@ const SearchBlogs = async (req, res) => {
     try {
         const searchQuery = req.query.search; // Get the search query from query parameters
 
-        if (!searchQuery) {
+        if (!searchQuery || searchQuery === '') {
             return res.status(400).json({ error: 'Search query is required.' });
         }
 
@@ -20,7 +20,7 @@ const SearchBlogs = async (req, res) => {
             ]
         });
 
-        res.json({ blogPosts });
+        return res.status(200).json({ blogPosts });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Internal Server Error" });

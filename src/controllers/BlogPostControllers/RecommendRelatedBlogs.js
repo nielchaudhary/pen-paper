@@ -2,17 +2,17 @@ const TfIdf = require('node-tfidf');
 const BlogPost = require('../../models/BlogPostModel');
 
 const recommendRelatedPosts = async (req, res) => {
-    const currentPostId = req.query.postId;
-
-    if (!currentPostId) {
-        return res.status(400).send('No post id specified');
-    }
-
     try {
+        const currentPostId = req.query.postId;
+
+        if (!currentPostId || typeof currentPostId !== 'string') {
+            return res.status(400).json({ error: 'Please Provide Correct PostId' });
+        }
+
         const currentPost = await BlogPost.findById(currentPostId);
 
         if (!currentPost) {
-            return res.status(404).send('Post not found');
+            return res.status(400).json({ error: 'Blog not found' });
         }
 
         const currentContent = currentPost.content || '';
@@ -49,7 +49,8 @@ const recommendRelatedPosts = async (req, res) => {
             .map((item) => item.post)
             .slice(0, 5); // Limiting to 5 related posts
 
-        return res.send(relatedPosts);
+        // Respond with status 200 and relatedPosts using .then
+        return res.status(200).json({ relatedPosts });
     } catch (error) {
         console.error(error);
         return res.status(500).json({ error: 'Internal Server Error' });
