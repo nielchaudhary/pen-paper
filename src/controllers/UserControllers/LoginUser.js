@@ -7,7 +7,7 @@ const Redis = require('redis')
 
 const redisClient = Redis.createClient()
 
-const default_expiry = 1800;
+const default_expiry = 3600;
 
 
 
