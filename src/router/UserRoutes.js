@@ -12,11 +12,12 @@ const authenticateJWT = require('../middleware/authenticateJwt')
 
 //validation routes
 const validateUser = require('../validation/validateUser')
+const validateDeleteUser = require('../validation/validateDeleteUser')
 
 // Endpoint for creating a new user
 router.post('/createUser', validateUser,CreateNewUserController);
 router.post('/loginUser',validateUser, LoginUserController)
-router.delete('/deleteUser', authenticateJWT,validateUser, DeleteUserController)
+router.delete('/deleteUser', authenticateJWT,validateDeleteUser, DeleteUserController)
 router.post('/logoutUser', authenticateJWT,LogoutUserController)
 
 module.exports = router;
