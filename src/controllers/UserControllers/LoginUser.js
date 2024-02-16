@@ -1,10 +1,17 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/UserModel');
+const {validationResult} = require("express-validator");
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 
 const loginUser = async (req, res) => {
     try {
+        //validation
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         const { username, password } = req.body;
         // Find the user in the database by their username
         const user = await User.findOne({ username: username });
