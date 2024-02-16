@@ -1,13 +1,15 @@
 const TfIdf = require('node-tfidf');
 const BlogPost = require('../../models/BlogPostModel');
+const {validationResult} = require("express-validator");
 
 const recommendRelatedPosts = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
         const currentPostId = req.query.postId;
 
-        if (!currentPostId || typeof currentPostId !== 'string') {
-            return res.status(400).json({ error: 'Please Provide Correct PostId' });
-        }
 
         const currentPost = await BlogPost.findById(currentPostId);
 

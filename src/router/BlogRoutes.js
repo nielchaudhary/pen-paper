@@ -4,6 +4,18 @@ const app = express()
 const limiter = require('../middleware/RateLimiter')
 const router = express.Router();
 
+
+const authenticateJWT = require('../middleware/authenticateJwt')
+
+//validation routes
+const validateNewBlog = require('../validation/validateNewBlog')
+const validateDeleteBlog = require('../validation/validateDeleteBlog')
+const validateUpdateBlog = require('../validation/validateUpdateBlog')
+const validateLatestNBlogs = require('../validation/validateLatestNBlogs')
+const validateReadSpecificBlog = require('../validation/validateReadSpecificBlog')
+const validateRecommendedRelatedBlog = require('../validation/validateRecommendRelatedBlogs')
+const validateSearchBlog = require('../validation/validateSearchBlog')
+
 app.use(limiter)
 
 
@@ -21,14 +33,14 @@ const MostPopularBlogController = require('../controllers/BlogPostControllers/Mo
 const RecommendRelatedBlogsController = require('../controllers/BlogPostControllers/RecommendRelatedBlogs.js')
 
 // Endpoint for creating a new user
-router.post('/createNewBlog',limiter, CreateNewBlogController);
-router.delete('/deleteBlog',limiter, DeleteBlogController);
-router.put('/updateBlog',limiter, UpdateBlogController);
+router.post('/createNewBlog',limiter, authenticateJWT, validateNewBlog, CreateNewBlogController);
+router.delete('/deleteBlog',limiter,authenticateJWT,validateDeleteBlog, DeleteBlogController);
+router.put('/updateBlog',limiter,authenticateJWT, validateUpdateBlog, UpdateBlogController);
 router.get('/readAllBlogs',limiter, ReadAllBlogsController);
-router.get('/readSpecificBlog',limiter,ReadSpecificBlogController)
-router.get('/searchBlog',limiter, SearchBlogController)
-router.get('/latestNBlogs', limiter,LatestNBlogController)
+router.get('/readSpecificBlog',limiter, validateReadSpecificBlog,ReadSpecificBlogController)
+router.get('/searchBlog',limiter,validateSearchBlog, SearchBlogController)
+router.get('/latestNBlogs', limiter,validateLatestNBlogs,LatestNBlogController)
 router.get('/mostPopularBlogs',limiter, MostPopularBlogController)
-router.get('/recommendRelatedBlogs',limiter,RecommendRelatedBlogsController)
+router.get('/recommendRelatedBlogs',limiter,validateRecommendedRelatedBlog,RecommendRelatedBlogsController)
 
 module.exports = router;

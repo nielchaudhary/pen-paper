@@ -1,7 +1,13 @@
 const BlogPost = require("../../models/BlogPostModel");
+const {validationResult} = require("express-validator");
 
 const SearchBlogs = async (req, res) => {
     try {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
         const searchQuery = req.query.search; // Get the search query from query parameters
 
         if (!searchQuery || searchQuery === '') {
@@ -20,7 +26,7 @@ const SearchBlogs = async (req, res) => {
             ]
         });
 
-        return res.status(200).json({ blogPosts });
+        return res.status(200).json({ blogPosts});
     } catch (error) {
         res.status(500).json({ error: "Internal Server Error" });
     }

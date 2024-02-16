@@ -5,10 +5,17 @@ const router = express.Router();
 const CreateNewUserController = require('../controllers/UserControllers/CreateNewUser')
 const LoginUserController = require('../controllers/UserControllers/LoginUser')
 const DeleteUserController = require('../controllers/UserControllers/DeleteUser')
+const LogoutUserController = require('../controllers/UserControllers/LogoutUser')
+const authenticateJWT = require('../middleware/authenticateJwt')
+
+//validation routes
+
+const validateUser = require('../validation/validateUser')
 
 // Endpoint for creating a new user
-router.post('/createUser', CreateNewUserController);
-router.post('/loginUser', LoginUserController)
-router.delete('/deleteUser', DeleteUserController)
+router.post('/createUser', validateUser,CreateNewUserController);
+router.post('/loginUser',validateUser, LoginUserController)
+router.delete('/deleteUser', authenticateJWT,validateUser, DeleteUserController)
+router.post('/logoutUser', authenticateJWT,LogoutUserController)
 
 module.exports = router;

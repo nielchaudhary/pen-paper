@@ -1,22 +1,20 @@
 const jwt = require('jsonwebtoken');
 const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
+const { validationResult } = require('express-validator');
+
 require("dotenv").config();
 const secretKey = process.env.SECRET_KEY;
 
-const Redis = require('redis');
-const redisClient = Redis.createClient();
-
 const newBlog = async (req, res) => {
     try {
-        // Connect to Redis
-        await redisClient.connect();
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
         // Retrieve the JWT from Redis
-        const jwtvalue = await redisClient.get('jwt');
-
-        const tokenHeader = jwtvalue.replace(/["\\]/g, '');
-
+        const tokenHeader = req.cookies.jwtToken;
         if (!tokenHeader) {
             return res.status(401).json({ error: 'Unauthorized - Invalid token format' });
         }
@@ -26,11 +24,6 @@ const newBlog = async (req, res) => {
         const userId = decoded.userId;
         const { title, content, category } = req.body;
 
-        // Validate that both title and content are provided
-        if (!title || !content || !category) {
-             res.status(400).json({ error: 'Title, content, and category are required' });
-             return;
-        }
         const user = await User.findById(userId);
 
         if (!user) {
@@ -55,9 +48,6 @@ const newBlog = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
 
 
-    } finally {
-        // Close the Redis connection after completion
-        await redisClient.quit();
     }
 };
 

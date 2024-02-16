@@ -1,12 +1,13 @@
 const User = require('../../models/UserModel');
+const {validationResult} = require("express-validator");
 
 const deleteUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
-
-        if(!username || !password) {
-            return res.status(400).send("Both username and password are required to delete the account.")
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
+        const { username, password } = req.body;
 
         // Check if a user with the provided username exists
         const existingUser = await User.findOne({ username });

@@ -1,13 +1,13 @@
 const User = require('../../models/UserModel');
+const {validationResult} = require("express-validator");
 
 const createUser = async (req, res) => {
     try {
-        const { username, password } = req.body;
-
-        //validation
-        if(!username || !password) {
-            return res.status(400).send("Username and Password is required.")
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
         }
+        const { username, password } = req.body;
 
         // Check if a user with the same username already exists
         const existingUser = await User.findOne({ username });

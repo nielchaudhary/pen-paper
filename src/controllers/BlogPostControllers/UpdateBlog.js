@@ -1,19 +1,22 @@
 const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
 const jwt = require("jsonwebtoken");
+const {validationResult} = require("express-validator");
 require('dotenv').config();
 const secretKey = process.env.SECRET_KEY;
 
-const Redis = require('redis');
-const redisClient = Redis.createClient();
+
 
 // Controller to update a blog
 const updateBlog = async (req, res) => {
     try {
-        await redisClient.connect();
-        const jwtvalue = await redisClient.get('jwt');
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
 
-        const tokenHeader = jwtvalue.replace(/["\\]/g, '');
+
+        const tokenHeader = req.cookies.jwtToken
 
         if (!tokenHeader) {
             return res.status(401).json({ error: 'Unauthorized - Invalid token format' });
@@ -58,7 +61,12 @@ const updateBlog = async (req, res) => {
         blog.category = category || blog.category;
         blog.updatedAt = new Date();
 
-        res.status(200).json({ message: 'Blog updated successfully', updatedBlog: blog });
+        res.status(200).json({ message: 'Blog updated successfully', updatedBlog: {
+            title: blog.title,
+                content: blog.content,
+                category: blog.category,
+                updatedAt : blog.updatedAt
+            } });
 
 
         await blog.save();
@@ -71,8 +79,6 @@ const updateBlog = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
-    } finally {
-        await redisClient.quit();
     }
 };
 
