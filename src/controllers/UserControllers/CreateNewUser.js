@@ -3,6 +3,8 @@ const {validationResult} = require("express-validator");
 
 const createUser = async (req, res) => {
     try {
+
+        //validation
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.status(400).json({ errors: errors.array() });
