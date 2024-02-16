@@ -1,6 +1,8 @@
-// routes/userRoutes.js
+
 const express = require('express');
 const router = express.Router();
+
+
 // Correct the path based on your actual file structure
 const CreateNewUserController = require('../controllers/UserControllers/CreateNewUser')
 const LoginUserController = require('../controllers/UserControllers/LoginUser')
@@ -9,7 +11,6 @@ const LogoutUserController = require('../controllers/UserControllers/LogoutUser'
 const authenticateJWT = require('../middleware/authenticateJwt')
 
 //validation routes
-
 const validateUser = require('../validation/validateUser')
 
 // Endpoint for creating a new user
