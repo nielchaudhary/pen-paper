@@ -11,8 +11,8 @@ const LogoutUserController = require('../controllers/UserControllers/LogoutUser'
 const authenticateJWT = require('../middleware/authenticateJwt')
 
 //validation routes
-const validateUser = require('../validation/validateUser')
-const validateDeleteUser = require('../validation/validateDeleteUser')
+const validateUser = require('../validation/validateUsers/validateDeleteUser')
+const validateDeleteUser = require('../validation/validateUsers/validateDeleteUser')
 
 // Endpoint for creating a new user
 router.post('/createUser', validateUser,CreateNewUserController);

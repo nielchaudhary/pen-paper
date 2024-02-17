@@ -8,13 +8,13 @@ const router = express.Router();
 const authenticateJWT = require('../middleware/authenticateJwt')
 
 //validation routes
-const validateNewBlog = require('../validation/validateNewBlog')
-const validateDeleteBlog = require('../validation/validateDeleteBlog')
-const validateUpdateBlog = require('../validation/validateUpdateBlog')
-const validateLatestNBlogs = require('../validation/validateLatestNBlogs')
-const validateReadSpecificBlog = require('../validation/validateReadSpecificBlog')
-const validateRecommendedRelatedBlog = require('../validation/validateRecommendRelatedBlogs')
-const validateSearchBlog = require('../validation/validateSearchBlog')
+const validateNewBlog = require('../validation/validateBlog/validateNewBlog')
+const validateDeleteBlog = require('../validation/validateBlog/validateDeleteBlog')
+const validateUpdateBlog = require('../validation/validateBlog/validateUpdateBlog')
+const validateLatestNBlogs = require('../validation/validateBlog/validateLatestNBlogs')
+const validateReadSpecificBlog = require('../validation/validateBlog/validateReadSpecificBlog')
+const validateRecommendedRelatedBlog = require('../validation/validateBlog/validateRecommendRelatedBlogs')
+const validateSearchBlog = require('../validation/validateBlog/validateSearchBlog')
 
 app.use(limiter)
 
