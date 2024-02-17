@@ -13,7 +13,7 @@ const newBlog = async (req, res) => {
             return res.status(400).json({ errors: errors.array() });
         }
 
-        // Retrieve the JWT from Redis
+        // Retrieve the JWT frm Redis
         const tokenHeader = req.cookies.jwtToken;
         if (!tokenHeader) {
             return res.status(401).json({ error: 'Unauthorized - Invalid token format' });
