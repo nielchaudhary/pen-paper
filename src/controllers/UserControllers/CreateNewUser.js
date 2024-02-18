@@ -25,10 +25,12 @@ const createUser = async (req, res) => {
         const newUser = new User({ username, password: hashedPassword });
         await newUser.save();
 
+
         res.status(200).json({
             message: 'User Successfully Created',
-            username: newUser.username,
+            username: newUser.username, // This should now work correctly
         });
+
     } catch (error) {
         res.status(500).json({ error: 'Internal Server Error' });
     }
