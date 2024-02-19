@@ -16,9 +16,6 @@ const updateBlog = async (req, res) => {
 
         // Get the JWT token from the request cookies
         const tokenHeader = req.cookies.jwtToken;
-        if (!tokenHeader) {
-            return res.status(401).json({ error: 'Unauthorized - Invalid token format' });
-        }
 
         // Verify the token to get the user ID
         const decoded = jwt.verify(tokenHeader, secretKey);
