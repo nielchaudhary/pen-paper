@@ -34,20 +34,17 @@ const newBlog = async (req, res) => {
         const newBlogPost = new BlogPost({ title, content, category, createdByUser: user._id });
         await newBlogPost.save();
 
-        res.status(200).json({
-            Message: 'New Blog Added',
-            Blog: newBlogPost,
-        });
-
-        // Add the new blog post's ID to the user's blogs array
+        // Update user's blogs array and save
         user.blogs.push(newBlogPost._id);
         await user.save();
 
-
-    } catch (error) {
+        // Send success response
+        return res.status(200).json({
+            Message: 'New Blog Added',
+            Blog: newBlogPost,
+        });
+    } catch{
         res.status(500).json({ error: 'Internal Server Error' });
-
-
     }
 };
 

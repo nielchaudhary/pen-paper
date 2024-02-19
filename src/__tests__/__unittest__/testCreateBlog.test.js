@@ -98,14 +98,20 @@ describe('newBlog function', () => {
         expect(res.json).toHaveBeenCalledWith({ errors: [{ msg: 'Validation error' }] });
     });
 
-    it('should return internal server error for any other errors', async () => {
-        // Mock an internal server error
-        const error = new Error('Internal Server Error');
-        User.findById.mockRejectedValue(error);
+    test('should handle internal server error', async () => {
+        // Mocking validation results
+        validationResult.mockReturnValueOnce({ isEmpty: () => true });
 
-        await newBlog(req, res);
+        // Mocking jwt.verify to throw an error
+        jwt.verify.mockRejectedValueOnce(new Error('Test error'));
 
+        await deleteBlog(req, res);
+
+        expect(validationResult).toHaveBeenCalled();
+        expect(jwt.verify).toHaveBeenCalledWith(req.cookies.jwtToken, expect.any(String));
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
+        expect(User.findById).not.toHaveBeenCalled();
+        expect(BlogPost.findById).not.toHaveBeenCalled();
     });
 });
