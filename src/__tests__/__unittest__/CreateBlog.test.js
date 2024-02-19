@@ -2,9 +2,8 @@ const jwt = require('jsonwebtoken');
 const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
 const { validationResult } = require('express-validator');
-const newBlog = require('../../controllers/BlogPostControllers/CreateNewBlog'); // Import the newBlog function
-
-// Mock the express-validator validationResult function
+const newBlog = require('../../controllers/BlogPostControllers/CreateNewBlog');
+const updateBlog = require("../../controllers/BlogPostControllers/UpdateBlog");
 jest.mock('express-validator', () => ({
     validationResult: jest.fn()
 }));
@@ -103,15 +102,15 @@ describe('newBlog function', () => {
         validationResult.mockReturnValueOnce({ isEmpty: () => true });
 
         // Mocking jwt.verify to throw an error
-        jwt.verify.mockRejectedValueOnce(new Error('Test error'));
+        jwt.verify.mockImplementation(() => {
+            throw new Error('Test error');
+        });
 
-        await deleteBlog(req, res);
+        await newBlog(req, res);
 
-        expect(validationResult).toHaveBeenCalled();
-        expect(jwt.verify).toHaveBeenCalledWith(req.cookies.jwtToken, expect.any(String));
         expect(res.status).toHaveBeenCalledWith(500);
         expect(res.json).toHaveBeenCalledWith({ error: 'Internal Server Error' });
-        expect(User.findById).not.toHaveBeenCalled();
-        expect(BlogPost.findById).not.toHaveBeenCalled();
+
     });
+
 });

@@ -1,4 +1,4 @@
-const deleteBlog = require('../../controllers/BlogPostControllers/DeleteBlog'); // Assuming the controller is in a file named deleteBlog.js
+const deleteBlog = require('../../controllers/BlogPostControllers/DeleteBlog');
 const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
 const jwt = require('jsonwebtoken');
@@ -86,7 +86,7 @@ describe('deleteBlog controller', () => {
     });
 
 
-// In the testDeleteBlog.test.js file
+// In the DeleteBlog.test.js file
 
     test('should handle internal server error', async () => {
         // Mocking validation results

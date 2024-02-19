@@ -129,5 +129,4 @@ describe('updateBlog function', () => {
         expect(BlogPost.findById).not.toHaveBeenCalled();
     });
 
-    // Write additional test cases for validation errors and internal server errors if needed
 });
