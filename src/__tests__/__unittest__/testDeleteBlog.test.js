@@ -3,7 +3,6 @@ const User = require('../../models/UserModel');
 const BlogPost = require('../../models/BlogPostModel');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
-const newBlog = require("../../controllers/BlogPostControllers/CreateNewBlog");
 
 // Mocking the required modules
 jest.mock('../../models/UserModel');
