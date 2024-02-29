@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1708344537091" clover="3.2.0">
-  <project timestamp="1708344537091" name="All files">
-    <metrics statements="167" coveredstatements="163" conditionals="44" coveredconditionals="37" methods="8" coveredmethods="8" elements="219" coveredelements="208" complexity="0" loc="167" ncloc="167" packages="3" files="9" classes="9"/>
+<coverage generated="1708727335632" clover="3.2.0">
+  <project timestamp="1708727335632" name="All files">
+    <metrics statements="179" coveredstatements="173" conditionals="48" coveredconditionals="39" methods="9" coveredmethods="9" elements="236" coveredelements="221" complexity="0" loc="179" ncloc="179" packages="3" files="10" classes="10"/>
     <package name="controllers.BlogPostControllers">
-      <metrics statements="90" coveredstatements="86" conditionals="28" coveredconditionals="21" methods="4" coveredmethods="4"/>
+      <metrics statements="102" coveredstatements="96" conditionals="32" coveredconditionals="23" methods="5" coveredmethods="5"/>
       <file name="CreateNewBlog.js" path="/Users/neelchaudhary/Desktop/Code/projects/scootersonMasti/scooterson/src/controllers/BlogPostControllers/CreateNewBlog.js">
         <metrics statements="27" coveredstatements="26" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
         <line num="1" count="1" type="stmt"/>
@@ -67,6 +67,21 @@
         <line num="51" count="1" type="stmt"/>
         <line num="59" count="1" type="stmt"/>
         <line num="63" count="1" type="stmt"/>
+      </file>
+      <file name="LatestNBlogs.js" path="/Users/neelchaudhary/Desktop/Code/projects/scootersonMasti/scooterson/src/controllers/BlogPostControllers/LatestNBlogs.js">
+        <metrics statements="12" coveredstatements="10" conditionals="4" coveredconditionals="2" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="7" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="8" count="0" type="stmt"/>
+        <line num="12" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="19" count="0" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
       </file>
       <file name="UpdateBlog.js" path="/Users/neelchaudhary/Desktop/Code/projects/scootersonMasti/scooterson/src/controllers/BlogPostControllers/UpdateBlog.js">
         <metrics statements="32" coveredstatements="31" conditionals="14" coveredconditionals="10" methods="1" coveredmethods="1"/>
@@ -188,13 +203,13 @@
       <metrics statements="12" coveredstatements="12" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
       <file name="BlogPostModel.js" path="/Users/neelchaudhary/Desktop/Code/projects/scootersonMasti/scooterson/src/models/BlogPostModel.js">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
-        <line num="1" count="3" type="stmt"/>
-        <line num="2" count="3" type="stmt"/>
-        <line num="4" count="3" type="stmt"/>
-        <line num="35" count="3" type="stmt"/>
-        <line num="36" count="3" type="stmt"/>
-        <line num="39" count="3" type="stmt"/>
-        <line num="41" count="3" type="stmt"/>
+        <line num="1" count="4" type="stmt"/>
+        <line num="2" count="4" type="stmt"/>
+        <line num="4" count="4" type="stmt"/>
+        <line num="35" count="4" type="stmt"/>
+        <line num="36" count="4" type="stmt"/>
+        <line num="39" count="4" type="stmt"/>
+        <line num="41" count="4" type="stmt"/>
       </file>
       <file name="UserModel.js" path="/Users/neelchaudhary/Desktop/Code/projects/scootersonMasti/scooterson/src/models/UserModel.js">
         <metrics statements="5" coveredstatements="5" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>

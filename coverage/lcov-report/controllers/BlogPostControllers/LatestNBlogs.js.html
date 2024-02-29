@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>10/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>10/12</span>
             </div>
         
             
@@ -88,22 +88,28 @@
 <a name='L23'></a><a href='#L23'>23</a>
 <a name='L24'></a><a href='#L24'>24</a>
 <a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L26'></a><a href='#L26'>26</a>
+<a name='L27'></a><a href='#L27'>27</a>
+<a name='L28'></a><a href='#L28'>28</a>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -113,31 +119,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">    const BlogPostModel = require("../../models/BlogPostModel");
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const BlogPostModel = require("../../models/BlogPostModel");
+const { validationResult } = require("express-validator");
 &nbsp;
-    const LatestNBlogs = async (req, res) =&gt; {
-        try {
-            // Get the value of N from the query parameter, default to 5 if not provided
-            const numberOfPosts = parseInt(req.query.N, 10) || 5;
-            <span class="missing-if-branch" title="if path not taken" >I</span>if(!numberOfPosts){
-<span class="cstat-no" title="statement not covered" >                return res.json({error: "Enter the Number of Latest Blog Posts you want to retrieve"})</span>
-            }
-&nbsp;
-            // Fetch the latest N blog posts from the database
-            const latestBlogs = await BlogPostModel.find()
-                .sort({ createdAt: -1 }) // Sort by createdAt in descending order
-                .limit(numberOfPosts);
-&nbsp;
-            res.json({
-                message: `Latest ${numberOfPosts} Blog Posts`,
-                blogs: latestBlogs,
-            });
-        } catch (error) {
-            res.status(500).json({ error: 'New Server Error' });
+const LatestNBlogs = async (req, res) =&gt; {
+    try {
+        const errors = validationResult(req);
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!errors.isEmpty()) {
+<span class="cstat-no" title="statement not covered" >            return res.status(400).json({ errors: errors.array() });</span>
         }
-    };
 &nbsp;
-    module.exports = LatestNBlogs;
+        // Get the value of N from the query parameter, default to 5 if not provided
+        const numberOfPosts = parseInt(req.query.N, 10) || <span class="branch-1 cbranch-no" title="branch not covered" >5;</span>
+&nbsp;
+        // Fetch the latest N blog posts from the database
+        const latestBlogs = await BlogPostModel.find()
+            .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+            .limit(numberOfPosts);
+&nbsp;
+<span class="cstat-no" title="statement not covered" >         res.status(200).json({</span>
+            blogs: latestBlogs,
+        });
+&nbsp;
+    } catch (error) {
+         res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+&nbsp;
+module.exports = LatestNBlogs;
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -145,7 +154,7 @@
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2024-02-05T14:17:50.991Z
+                at 2024-02-23T22:28:55.607Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
